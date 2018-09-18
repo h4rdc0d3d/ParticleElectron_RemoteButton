@@ -1,3 +1,2 @@
 # particle
-Particle Projects
-This is a nice project!
+Particle Projects <br> This is a nice project!
