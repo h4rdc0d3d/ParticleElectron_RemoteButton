@@ -2,8 +2,8 @@
  * Copyright (c) 2018 Tim Hornikel. All rights reserved.
  * Project  : VAN-ESK Buzzer
  * Compiler : Electron, v0.8.0-rc.8
- * Verion   : 2.4.3
- * Date     : 20/08/2018
+ * Verion   : 1.2.0
+ * Date     : 21/09/2018
 *******************************************************************************/
 
 // Set your 3rd-party SIM APN here
