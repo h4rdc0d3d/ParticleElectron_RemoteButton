@@ -95,4 +95,4 @@ Want to contribute to the Particle firmware project? Follow [this link](CONTRIBU
 
 ### CONNECT
 
-Having problems or have awesome suggestions? Connect with us [here.](https://community.particle.io/)
+Having problems or have awesome suggestions? Connect with me.
