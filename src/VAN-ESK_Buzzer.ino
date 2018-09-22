@@ -11,7 +11,7 @@
 STARTUP(cellular_credentials_set("web.vodafone.de", "", "", NULL));
 
 // Declaration of Version
-String FSWVersion = "SWx";
+//String FSWVersion = "SWx";
 
 #include "clickButton.h";
 
