@@ -11,7 +11,7 @@
 STARTUP(cellular_credentials_set("internet", "", "", NULL));
 
 // Declaration of Version
-String FSWVersion = "SW2";
+String FSWVersion = "SWx";
 
 #include "clickButton.h";
 
