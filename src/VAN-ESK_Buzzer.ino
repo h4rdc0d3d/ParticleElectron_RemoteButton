@@ -8,7 +8,7 @@
 
 // Set your 3rd-party SIM APN here
 // https://docs.particle.io/reference/firmware/electron/#setcredentials-
-STARTUP(cellular_credentials_set("internet", "", "", NULL));
+STARTUP(cellular_credentials_set("web.vodafone.de", "", "", NULL));
 
 // Declaration of Version
 String FSWVersion = "SWx";
