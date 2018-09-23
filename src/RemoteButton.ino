@@ -10,6 +10,10 @@
 // Includings of 3rd party libraries
 #include "clickButton.h";
 
+// Set your 3rd-party SIM APN
+// https://docs.particle.io/reference/firmware/electron/#setcredentials-
+STARTUP(cellular_credentials_set("web.vodafone.de", "", "", NULL));
+
 // Declaration of digital IOs
 const int redLED = D0;
 const int greenLED = D1;
