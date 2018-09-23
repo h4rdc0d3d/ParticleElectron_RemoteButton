@@ -1,38 +1,27 @@
 /*******************************************************************************
- * Copyright (c) 2018 Tim Hornikel. All rights reserved.
- * Project  : VAN-ESK Buzzer
- * Compiler : Electron, v0.8.0-rc.8
- * Verion   : 1.2.0
- * Date     : 21/09/2018
+ * Project  : Remote Button
+ * Compiler : Particle Electron
+ * Verion   : 1.3.0
+ * Date     : 23.09.2018
+ * Author   : Tim Hornikel
+ * License  : GNU General Public License v3+
 *******************************************************************************/
 
-// Set your 3rd-party SIM APN here
-// https://docs.particle.io/reference/firmware/electron/#setcredentials-
-STARTUP(cellular_credentials_set("internet", "", "", NULL));
-
-// Declaration of Version
-String FSWVersion = "SWx";
-
+// Includings of 3rd party libraries
 #include "clickButton.h";
 
-// the Button
-const int buttonPin1 = 3;
-ClickButton button1(buttonPin1, HIGH, CLICKBTN_PULLUP);
-
-// Button results
-int function = 0;
-
 // Declaration of digital IOs
-int redLED = D0;
-int greenLED = D1;
-int blueLED = D2;
-int onBoardLED = D7;
-//int button = D3;
-int switchMode = D4;
+const int redLED = D0;
+const int greenLED = D1;
+const int blueLED = D2;
+const int onBoardLED = D7;
+const int switchMode = D4;
+const int buttonPin = 3;
 
 // Declaration of state variables
 int iValButton = 0; // actual state of the button
 int iNumberMails = 4; // total number of prepared e-mails to sent randomly
+int function = 0; // Button results
 
 // Declaration of time variables
 unsigned long lastSync = millis();
@@ -42,10 +31,10 @@ unsigned long threshold (15 * 60 * 1000); // 15 minutes
 unsigned long lastCheck = millis();
 unsigned long thresholdCheck (5 * 1000); // 5 seconds
 
-/* This function is called once at start up ----------------------------------*/
-void setup() {
+ClickButton button1(buttonPin, HIGH, CLICKBTN_PULLUP);
 
-  pinMode(D3, INPUT_PULLDOWN);
+/* This  is called once at start up ----------------------------------*/
+void setup() {
 
   // Setup button timers (all in milliseconds / ms)
   // (These are default if not set, but changeable for convenience)
@@ -53,31 +42,28 @@ void setup() {
   button1.multiclickTime = 500;  // Time limit for multi clicks
   button1.longClickTime  = 1000; // time until "held-down clicks" register
 
+  // Declaration of IOs
+  pinMode(blueLED, OUTPUT);
+  pinMode(redLED, OUTPUT);
+  pinMode(greenLED, OUTPUT);
+  pinMode(onBoardLED, OUTPUT);
+  pinMode(switchMode, INPUT_PULLDOWN);
+  pinMode(D3, INPUT_PULLDOWN);
 
-    // Declaration of IOs
-    pinMode(blueLED, OUTPUT);                // Output of notification LED
-    pinMode(redLED, OUTPUT);
-    pinMode(greenLED, OUTPUT);
-    pinMode(onBoardLED, OUTPUT);
-    //pinMode(button, INPUT_PULLDOWN);            // Input of button signal
-    pinMode(switchMode, INPUT_PULLDOWN);
+  // Resetting the notification time
+  lastNotification = lastNotification + threshold;
 
-    // Resetting the notification time
-    lastNotification = lastNotification + threshold;
+  // Declaration of particle  to turn the notification threshold on and off from the cloud.
+  Particle.function("Threshold",notificationThresholdToggle);
+  Particle.function("SoC",SoC);
+  Particle.variable("NumberMails", iNumberMails);
 
-    // Declaration of particle function to turn the notification threshold on and off from the cloud.
-    Particle.function("Threshold",notificationThresholdToggle);
-    Particle.function("SoC",SoC);
-    //Particle.variable("SoC", SoC);
-    Particle.variable("FW Version", FSWVersion);
-    Particle.variable("NumberMails", iNumberMails);
+  // Activation of serial interface for debugging
+  Serial.begin(9600);  // open serial over TX and RX pins
+  Serial.println("Setup complete");
 
-    // Activation of serial interface for debugging
-    Serial.begin(9600);  // open serial over TX and RX pins
-    Serial.println("Setup complete");
-
-    // KeepAlive signal for 3rd party SIM-card
-    Particle.keepAlive(30);
+  // KeepAlive signal for 3rd party SIM-card
+  Particle.keepAlive(30);
 
 }
 
@@ -103,12 +89,14 @@ void loop() {
 /*******************************************************************************
  * Function Name  : random_seed_from_cloud
  * Description    : recieves a new random seed from the cloud
- * Input          : None
+ * Input          : seed
  * Output         : None
  * Return         : None
  *******************************************************************************/
  void random_seed_from_cloud(unsigned seed) {
+
    srand(seed);
+
  }
 
 /*******************************************************************************
@@ -121,10 +109,12 @@ void loop() {
 void updateTime() {
 
     if (millis() - lastSync > ONE_DAY_MILLIS) {
+
     // Request time synchronization from the Particle Cloud
     Particle.syncTime();
     Serial.println("Time updated");
     lastSync = millis();
+
     }
 
 }
